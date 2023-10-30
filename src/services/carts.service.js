@@ -21,9 +21,9 @@ export default class CartsService {
     }
   }
 
-  async createCart(userId) {
+  async createCart() {
     try {
-      const newCart = await this.dao.create(userId);
+      const newCart = await this.dao.create();
       return newCart;
     } catch (error) {
       throw new Error(`Error al crear el carrito: ${error}`);

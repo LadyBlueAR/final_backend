@@ -1,7 +1,6 @@
 {
   "name": "src",
   "version": "1.0.0",
-  "description": "",
   "main": "app.js",
   "type": "module",
   "scripts": {
@@ -38,5 +37,9 @@
     "mocha": "^10.2.0",
     "superset": "^2.0.1",
     "supertest": "^6.3.3"
-  }
+  },
+  "directories": {
+    "test": "test"
+  },
+  "description": ""
 }

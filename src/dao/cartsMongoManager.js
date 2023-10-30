@@ -1,6 +1,5 @@
 import { cartModel } from '../dao/mongo/models/carts.model.js';
 import { productModel } from './mongo/models/products.model.js';
-import { userModel } from './mongo/models/user.model.js';
 
 export default class CartsMongoManager {
   async findAll() {
@@ -24,28 +23,18 @@ export default class CartsMongoManager {
     }
   }
 
-  async create(userId) {
+  async create() {
     try {
       const newCart = await cartModel.create({
         products: [],
       });
-
-      const cartId = newCart._id;
-
-      const updatedUser = await userModel.findByIdAndUpdate(
-        {_id: userId },
-        { $set: { 'cart': cartId}},
-        {new: true}
-      );
-      
-      if (!updatedUser) {
-        throw new Error(`Usuario no entocontrado con id ${userId}`);
-      }
+  
       return newCart;
     } catch (error) {
       throw new Error(`Error al crear el carrito: ${error}`);
     }
   }
+  
 
   async addProduct(cartId, productId) {
     try {

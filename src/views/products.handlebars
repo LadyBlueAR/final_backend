@@ -27,14 +27,12 @@
     <a href="{{nextLink}}"><button>Siguiente</button></a>
     {{/if}}
     </div>  
-    <button id="purchase" userPurchaseCart="{{user.cart}}">Finalizar Compra</button>
-    </div>
-  
+    <a href="./carts/{{user.cart}}"><button>Finalizar Compra</button></a>
+    </div>  
 </div>
 <script src="./js/login.js"></script>
 <script type="module" src="./js/addToCart.js"></script>
 <script type="module" src="./js/createCart.js"></script>
-<script type="module" src="./js/purchase.js"></script>
 
 
 

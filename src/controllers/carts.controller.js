@@ -1,6 +1,7 @@
 import CartsService from '../services/carts.service.js';
 import ProductsService from '../services/products.service.js';
 import TicketsService from '../services/tickets.service.js';
+import { userModel } from '../dao/mongo/models/user.model.js';
 
 const cs = new CartsService();
 const ps = new ProductsService();
@@ -40,10 +41,16 @@ export default class CartsController {
     const { pid } = req.params;
     const cid = req.session.user.cart;
     try {
-      const updatedCart = await cs.addProductToCart(cid, pid);
-      res.status(200).json({ message: 'Producto agregado correctamente', payload: updatedCart });
+        if (!cid) {
+            const newCart = await cs.createCart(); 
+            req.session.user.cart = newCart._id;
+            await userModel.findOneAndUpdate({ _id: req.session.user._id }, { cart: newCart._id });
+        }
+
+        const updatedCart = await cs.addProductToCart(cid, pid);
+        res.status(200).json({ message: 'Producto agregado correctamente', payload: updatedCart });
     } catch (error) {
-      res.status(500).json({ error: `Error al agregar el producto al carrito: ${error.message}` });
+        res.status(500).json({ error: `Error al agregar el producto al carrito: ${error.message}` });
     }
   }
 

@@ -89,3 +89,6 @@ error: undefined
 error: undefined
 error: Carrito inexistente o vacío
 error: undefined
+error: Error de permisos
+error: undefined
+error: undefined
