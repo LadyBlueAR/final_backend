@@ -1,0 +1,136 @@
+openapi: 3.0.0
+
+info:
+  title: API de Productos
+  version: 1.0.0
+
+paths:
+  /api/products/:
+    get:
+      summary: Obtiene todos los productos
+      tags:
+        - Products
+      responses:
+        '200':
+          description: Todos los productos fueron obtenidos de la base de datos
+        '500':
+          description: Error al obtener los productos de la base de datos
+    post:
+      summary: Crea un nuevo producto
+      tags:
+        - Products
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Product'
+      responses:
+        '201':
+          description: Producto creado exitosamente
+        '400':
+          description: Datos de producto no válidos
+        '500':
+          description: Error al crear el producto
+
+  /api/products/{pid}:
+    parameters:
+      - name: pid
+        in: path
+        required: true
+        description: ID del producto (ObjectId de MongoDB)
+        schema:
+          type: string
+    get:
+      summary: Obtiene un producto por ID
+      tags:
+        - Products
+      responses:
+        '200':
+          description: El producto fue encontrado en la base de datos
+        '404':
+          description: Producto no encontrado en la base de datos
+    put:
+      summary: Actualiza un producto por ID
+      tags:
+        - Products
+      parameters:
+        - name: pid
+          in: path
+          required: true
+          description: ID del producto (ObjectId de MongoDB)
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Product'
+      responses:
+        '200':
+          description: Producto actualizado exitosamente
+        '400':
+          description: Datos de producto no válidos
+        '404':
+          description: Producto no encontrado en la base de datos
+        '500':
+          description: Error al actualizar el producto
+    delete:
+      summary: Elimina un producto por ID
+      tags:
+        - Products
+      parameters:
+        - name: pid
+          in: path
+          required: true
+          description: ID del producto (ObjectId de MongoDB)
+          schema:
+            type: string
+      responses:
+        '204':
+          description: Producto eliminado exitosamente
+        '404':
+          description: Producto no encontrado en la base de datos
+        '500':
+          description: Error al eliminar el producto
+
+components:
+  schemas:
+    Product:
+      type: object
+      properties:
+        _id:
+          type: string
+          description: ID del producto (ObjectId de MongoDB)
+        title:
+          type: string
+          description: Nombre del producto
+        description:
+          type: string
+          description: Breve descripción del producto
+        code:
+          type: string
+          description: Código del producto, es único y no se puede repetir
+        price:
+          type: number
+          description: El precio de venta del producto
+        status:
+          type: boolean
+          description: True o False
+        stock:
+          type: number
+          description: Cantidad de existencias del producto
+        category:
+          type: string
+          description: Categoria a la que pertenece el producto
+        thumbnails:
+          type: array
+          description: Imágenes del producto
+      example:
+        title: Ejemplo
+        description: Producto de Ejemplo
+        code: CE01
+        price: 99
+        stock: 120
+        category: A

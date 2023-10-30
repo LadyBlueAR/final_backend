@@ -1,0 +1,73 @@
+openapi: 3.0.0
+
+info:
+  title: API de Carritos
+  version: 1.0.0
+
+paths:
+  /api/carts/:
+    get:
+      summary: Obtiene todos los carritos
+      tags:
+        - Carts
+      responses:
+        '200':
+          description: Todos los carritos fueron obtenidos de la base de datos
+        '500':
+          description: Error al obtener los carritos de la base de datos
+  /api/carts/{cid}:
+    parameters:
+      - name: cid
+        in: path
+        required: true
+        description: ID del carrito
+        schema:
+          type: string
+    get:
+      summary: Obtiene un carrito por ID
+      tags:
+        - Carts
+      responses:
+        '200':
+          description: El carrito fue encontrado en la base de datos
+        '404':
+          description: Carrito no encontrado en la base de datos
+    delete:
+      summary: Elimina todos los productos del carrito utilizando su ID
+      tags:
+        - Carts
+      parameters:
+        - name: cid
+          in: path
+          required: true
+          description: ID del carrito
+          schema:
+            type: string
+      responses:
+        '204':
+          description: Carrito vaciado exitosamente
+        '404':
+          description: Carrito no encontrado en la base de datos
+        '500':
+          description: Error al eliminar los productos del carrito
+
+components:
+  schemas:
+    Cart:
+      type: object
+      properties:
+        _id:
+          type: string
+          description: ID del carrito (ObjectId de MongoDB)
+        products:
+          type: array
+          items:
+            type: object
+            properties:
+              product:
+                type: string
+                description: ID del producto (ObjectId de MongoDB)
+              quantity:
+                type: number
+                default: 1
+                description: Cantidad del producto en el carrito
