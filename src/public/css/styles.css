@@ -234,3 +234,22 @@ footer a {
 	color: #3c97bf;
 	text-decoration: none;
 }
+
+.products-btns {
+	margin-top: 20px;
+	display: flex;
+	justify-content: space-between;
+}
+
+.products button {
+	border: 1px solid #ff816a !important;
+	background-color: #ff816a !important;
+}
+
+.product {
+	height: 100%;
+	padding: 10px;
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+}

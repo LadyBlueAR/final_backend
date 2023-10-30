@@ -1,23 +1,23 @@
-<div>
+<div class="products">
     <h1>Hola {{user.first_name}} {{user.last_name}}</h1>
     <button id="logout">Cerrar Sesión</button>
     <h1 style="text-align: center;">Lista De Productos</h1>
-    <ul>
+    <div class="container product-container">
+ <ul>
         {{#each products}}
-            <li style="display: flex; justify-content: space-around;">
+            <li class="product">
                 <h2>{{this.title}}</h2>
-                <p>ID: {{this._id}}</p>
                 <p>{{this.description}}</p>
                 <p>Precio: {{this.price}}</p>
                 <button type="submit" id="{{this._id}}" class="addToCart" userCart="{{user.cart}}">Agregar al Carrito</button>             
             </li>
         {{/each}}
     </ul>
-    <br/>
-    <button id="createCart">Crear Carrito</button>
-    <button id="purchase" userPurchaseCart="{{user.cart}}">Finalizar Compra</button>
+    </div>
+    <div class="products-btns"> 
+    
     <div class="pagination">
-{{#if hasPrevPage}}
+    {{#if hasPrevPage}}
     <a href="{{prevLink}}"><button>Anterior</button></a>
     {{/if}}
 
@@ -26,7 +26,10 @@
     {{#if hasNextPage}}
     <a href="{{nextLink}}"><button>Siguiente</button></a>
     {{/if}}
-    </div>    
+    </div>  
+    <button id="purchase" userPurchaseCart="{{user.cart}}">Finalizar Compra</button>
+    </div>
+  
 </div>
 <script src="./js/login.js"></script>
 <script type="module" src="./js/addToCart.js"></script>
