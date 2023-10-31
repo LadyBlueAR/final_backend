@@ -1,3 +1,4 @@
+<div>
 <div class="container">
     <h1 style="text-align: center; margin: 5px;">CART ID : {{cart._id}}</h1>
     <ul>
@@ -7,7 +8,10 @@
                 <p>ID: {{this._id}}</p>
                 <p>Cantidad: {{this.quantity}}</p>
                 <p>Precio x Unidad: {{this.product.price}}</p>
+                <p>$ {{this.subtotal}}</p>
             </li>
         {{/each}}
     </ul>
+    <p>Total: {{cart.total}}</p>
 </div>
+<a href="/api/carts/{{cart._id}}/purchase"><button id="purchase">Finalizar Compra</button></a>

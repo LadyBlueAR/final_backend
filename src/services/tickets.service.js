@@ -5,9 +5,9 @@ class TicketsService {
     this.dao = new TicketsMongoManager();
   }
 
-  async createTicket(code, purchase_datetime, amount, purchaser) {
+  async createTicket(purchase_datetime, amount, purchaser) {
     try {
-      return await this.dao.create(code, purchase_datetime, amount, purchaser);
+      return await this.dao.create(purchase_datetime, amount, purchaser);
     } catch (error) {
       throw new Error(`Error al crear el ticket: ${error.message}`);
     }

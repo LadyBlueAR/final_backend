@@ -7,10 +7,11 @@ const router = Router();
 
 router.get('/', CartsController.getAllCarts);
 router.get('/:cid', CartsController.getCartById);
+router.get('/:cid/purchase', CartsController.purchaseCart);
 
 router.post('/createCart', CartsController.createCart);
 router.post('/:cid/products/:pid', CartsController.addProductToCart);
-router.post('/:cid/purchase', CartsController.purchaseCart);
+
 
 router.put('/:cid/products/:pid', CartsController.updateProductInCart);
 

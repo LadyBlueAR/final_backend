@@ -12,7 +12,16 @@ const cartSchema = new mongoose.Schema({
       type: Number,
       default: 1
     },
-  }]
+    subtotal: {
+      type: Number,
+      default: 0
+    }
+  }],
+  total: {
+    type: Number,
+    default: 0
+  }
 });
+
   
 export const cartModel = mongoose.model(cartCollection, cartSchema);

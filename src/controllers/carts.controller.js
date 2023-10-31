@@ -85,48 +85,56 @@ export default class CartsController {
     }
   }
 
-  static async purchaseCart (req, res) {
-    const { cid } = req.params;
-    const user = req.session.user;
-    const purchaser = user.email;
-    const purchase_datetime = new Date();
-    const code = "codigo01";
-
+  static async purchaseCart(req, res) {
+    const cid = req.session.user.cart;
+    const purchaser = req.session.user.email;
+    let amount = 0;
+    let insufficientStock = false;
     try {
       const cart = await cs.getCartById(cid);
-      let amount = 0;
-      if (!cart || cart.products.length === 0) {
-        req.logger.error('Carrito inexistente o vacío');
-        res.status(400).json({error: "Carrito inexistente o vacío"});
-      } 
-      for (const product of cart.products) {
-        const name = product.product.title;
-        const pid = product.product.id;
-        const quantity = product.quantity;
-        const price = product.product.price;
-
-        const hasStock = await ps.checkStock(pid, quantity);
-
-        if (hasStock) {
-          console.log(`Stock disponible del producto ${name}`);
-          amount += (price * quantity );
-          await cs.deleteProductFromCart(cid, pid);
-          await ps.subtractStock(pid, quantity);
-        } else if (!hasStock) {
-          req.logger.error(`Stock Insuficiente del producto : ${name}`);
-          return res.status(400).json({error: `Stock Insuficiente del producto: ${name}`});
+      if (!cart) {
+        res.status(400).json({ error: 'Carrito inexistente' });
+        return;
+      }
+  
+      const insufficientStockProducts = [];
+  
+      for (const item of cart.products) {
+        // Verifica el stock antes de restar
+        const hasSufficientStock = await ps.checkStock(item.product._id, item.quantity);
+  
+        if (hasSufficientStock) {
+          // Resta el stock del producto
+          await ps.subtractStock(item.product._id, item.quantity);
+          await cs.deleteProductFromCart(cid, item.product._id);
+          amount += item.subtotal;
+        } else {
+          // Agrega el producto sin stock suficiente a la lista de advertencias
+          insufficientStockProducts.push({
+            productId: item.product._id,
+            quantity: item.quantity
+          });
+          insufficientStock = true;
         }
       }
-      //Datos para el ticket
-      const newTicket = await ts.createTicket(code, purchase_datetime, amount, purchaser);
-      return res.status(201).json({
-        status: "Success",
-        message: "Compra realizada con éxito y ticket creado con éxito",
-        ticket: newTicket
-      });
+
+      if (insufficientStockProducts.length === cart.products.length) {
+        return res.status(200).json({ message: 'No hay stock de ninguno de los productos que desea comprar' });
+      }
+  
+      // Resto de la lógica para generar un ticket y finalizar la compra
+      const now = new Date();
+      var purchase_datetime = now.toLocaleTimeString('es-Latn');
+      const newTicket = await ts.createTicket(purchase_datetime, amount, purchaser);
+  
+      if (insufficientStock) {
+        res.render('ticket', { ticket: { purchase_datetime, amount, purchaser, code: newTicket.code, insufficientStockProducts }});
+      } else {
+        res.render('ticket', { ticket: { purchase_datetime, amount, purchaser, code: newTicket.code } });
+      }
     } catch (error) {
-      req.logger.error(error);
-      return res.status(400).json({ error: "Error al crear el ticket" });
+      res.status(500).json({ error: `Error al finalizar la compra: ${error.message}` });
     }
   }
+  
 }
