@@ -14,7 +14,7 @@ import { addLoggerProd } from './utils/loggers/logger.production.js';
 import swaggerJSDoc from 'swagger-jsdoc';
 import swaggerUiExpress from 'swagger-ui-express';
 
-
+//Routes
 import router from './routes/index.js';
 import views from './routes/views.router.js';
 
@@ -96,4 +96,3 @@ io.on('connection', async (socket) => {
         }
     });
 });
-

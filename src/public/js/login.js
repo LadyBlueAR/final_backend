@@ -70,3 +70,48 @@ document.addEventListener('DOMContentLoaded', (e) => {
         });
     });
 });
+
+document.addEventListener('DOMContentLoaded', (e) => {
+    document.querySelector('a[href="/api/sessions/passReset"]').addEventListener('click', function (e) {
+        e.preventDefault();
+        const signInContainer = document.querySelector('.sign-in-container');
+        const resetPasswordContainer = document.querySelector('.reset-password-container');
+        signInContainer.style.display = 'none';
+        resetPasswordContainer.style.display = 'block';
+      });      
+
+      const resetPasswordForm = document.getElementById('reset-password-form');
+
+      resetPasswordForm.addEventListener('submit', async (event) => {
+          event.preventDefault();
+
+          const formData = new FormData(resetPasswordForm);
+          const formDataJSON = {};
+          formData.forEach((value, key) => {
+              formDataJSON[key] = value;
+          });
+  
+          const response = await fetch('/api/sessions/passReset', {
+              method: 'POST',
+              headers: {
+                  'Content-Type': 'application/json',
+              },
+              body: JSON.stringify(formDataJSON),
+          });
+  
+          const responseData = await response.json();
+  
+          if (responseData.status === 'success') {
+            console.log("Redirigiendo...")
+              window.location.replace('/');
+          } else {
+              Swal.fire({
+                  icon: 'error',
+                  title: 'Error al enviar el correo de recuperación',
+                  confirmButtonColor: '#FF4B2B',
+                  text: 'Hubo un problema al enviar el correo de recuperación. Inténtalo nuevamente.',
+              });
+          }
+      });
+});
+

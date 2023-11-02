@@ -14,7 +14,8 @@ router.use('/sessions', sessionRouter);
 router.use('/mockingproducts', mockingRouter);
 router.use('/loggerTest', loggerTest);
 
-router.post('/products', (req, res) => {
+/*router.post('/products', (req, res) => {
     res.send("Producto agregado al carrito");
-})
+})*/
+
 export default router;

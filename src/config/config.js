@@ -9,5 +9,10 @@ export default {
     mongoUrl:process.env.MONGO_URL,
     secret:process.env.CLIENT_SECRET,
     adminEmail:process.env.ADMIN_EMAIL,
-    adminPassword:process.env.ADMIN_PASSWORD
+    adminPassword:process.env.ADMIN_PASSWORD,
+    mailing: [{
+        service: process.env.MAILING_SERVICE,
+        user: process.env.MAILING_USER,
+        password: process.env.MAILING_PASSWORD
+    }],
 }

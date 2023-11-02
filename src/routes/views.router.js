@@ -3,6 +3,7 @@ import { productModel } from '../dao/mongo/models/products.model.js';
 import { cartModel } from '../dao/mongo/models/carts.model.js';
 import SessionsController from '../controllers/sessions.controller.js';
 import RolesConfig from '../config/roles.config.js';
+import jwt from 'jsonwebtoken';
 
 const router = Router();
 
@@ -16,6 +17,17 @@ router.get('/login', (req, res) => {
 });
 router.get('/chat', RolesConfig.Authorize('user'), (req, res) => {
     res.render('chat');
+})
+
+router.get('/reset', async (req, res) => {
+    const token = req.query.token;
+    jwt.verify(token, 'claveDeRecuperacion', (err, decoded) => {
+        if (err) {
+            res.status(500).send({ status: "error", message: "El enlace ha caducado o es inválido"});
+        } else {
+            res.render('reset', {token});            
+        }
+    })
 })
 
 //General routes

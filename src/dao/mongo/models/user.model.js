@@ -14,6 +14,7 @@ const userSchema = new mongoose.Schema({
         default: null,
       },
     rol: { type: String, default: 'user' },
+    resetToken: {type: String, default: null}
 });
   
 export const userModel = mongoose.model(userCollection, userSchema);
