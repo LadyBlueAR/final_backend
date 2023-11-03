@@ -21,7 +21,7 @@ export default class UserController {
         const resetToken = jwt.sign(
             { email: user.email },
             'claveDeRecuperacion',
-            { expiresIn: '10m' }
+            { expiresIn: '1m' }
           );
 
         const hashedResetToken = await createHash(resetToken);
@@ -62,5 +62,19 @@ export default class UserController {
         res.render('login');
         //return res.status(200).json({ status: "success", message:"Contraseña cambiada con éxito"});
     }
+  }
+
+  static async changeRole ( req, res) {
+    const { uid } = req.params;
+    const user = await userModel.findById(uid);
+    switch (user.rol) {
+      case "user":
+        await userModel.findByIdAndUpdate(uid, { rol: "premium"});
+        break;
+      case "premium":
+        await userModel.findByIdAndUpdate(uid, { rol: "user"});
+        break;
+    }
+    res.send("ruta de cambio de usuarios");
   }
 }

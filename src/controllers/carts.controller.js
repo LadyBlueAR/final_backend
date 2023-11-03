@@ -40,15 +40,24 @@ export default class CartsController {
   static async addProductToCart(req, res) {
     const { pid } = req.params;
     const cid = req.session.user.cart;
+    const email = req.session.user.email;
+
     try {
+        const product = await ps.getProductById(pid);
+      
         if (!cid) {
             const newCart = await cs.createCart(); 
             req.session.user.cart = newCart._id;
             await userModel.findOneAndUpdate({ _id: req.session.user._id }, { cart: newCart._id });
         }
 
-        const updatedCart = await cs.addProductToCart(cid, pid);
-        res.status(200).json({ message: 'Producto agregado correctamente', payload: updatedCart });
+        if ( email === product.owner) {
+          res.status(400).json({ message: "No puede agregar al carrito un producto propio"});
+        }  else {
+          const updatedCart = await cs.addProductToCart(cid, pid);
+          res.status(200).json({ message: 'Producto agregado correctamente', payload: updatedCart });
+        }
+        
     } catch (error) {
         res.status(500).json({ error: `Error al agregar el producto al carrito: ${error.message}` });
     }

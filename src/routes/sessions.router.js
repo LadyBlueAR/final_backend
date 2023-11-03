@@ -14,6 +14,7 @@ router.post('/logout', SessionsController.logoutUser);
 
 router.post('/passReset', UserController.requestPasswordReset);
 router.post('/changePassword', UserController.changePassword);
+router.put('/premium/:uid', UserController.changeRole);
 
 export default router;
 

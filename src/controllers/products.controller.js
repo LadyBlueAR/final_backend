@@ -1,3 +1,4 @@
+import { productModel } from "../dao/mongo/models/products.model.js";
 import ProductsService from "../services/products.service.js";
 import CustomError from "../utils/errors/custom.errors.js";
 import EErrors from "../utils/errors/enum.errors.js";
@@ -70,10 +71,16 @@ export default class ProductsController {
     }
     static async createProduct(req, res) {
         const productData = req.body;
+        const user = req.session.user;
         try {
-            const result = await ps.createProduct(productData);
-            res.status(201).json({ message: 'Producto Creado', payload: result });
+            await ps.createProduct(productData);
+            if (user.rol === "premium") {
+                const product = await productModel.findOne({ code: productData.code});
+                await ps.updateProduct(product._id, { owner: user.email});
+            }
+            res.status(201).json({ message: 'Producto Creado'});
         } catch (error) {
+            console.log(error);
             CustomError.createError({
                 name: "Error de creación de producto",
                 cause: generateProductErrorInfo(productData),
@@ -98,10 +105,16 @@ export default class ProductsController {
 
     static async deleteProduct(req, res) {
         const { pid } = req.params;
+        const user = req.session.user;
+        const product = await ps.getProductById(pid);
         try {
-            const result = await ps.deleteProduct(pid);
-            req.logger.info("Producto Eliminado");
-            res.status(204).json({ message: 'Producto Eliminado', payload: result });
+            if (user.rol === "admin" || user.email === product.owner) {
+                const result = await ps.deleteProduct(pid);
+                req.logger.info("Producto Eliminado");
+                res.status(204).json({ message: 'Producto Eliminado', payload: result });
+            } else {
+                res.status(404).json("No tiene permisos para eliminar este producto");
+            }            
         } catch (error) {
             req.logger.error("Error al eliminar el producto");
             res.status(500).json({ error: `Error al eliminar el producto: ${error.message}` });

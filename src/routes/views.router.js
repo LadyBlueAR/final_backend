@@ -1,5 +1,6 @@
 import { Router } from 'express';
-import { productModel } from '../dao/mongo/models/products.model.js';
+//import { productModel } from '../dao/mongo/models/products.model.js';
+import productView from './views/productView.router.js';
 import { cartModel } from '../dao/mongo/models/carts.model.js';
 import SessionsController from '../controllers/sessions.controller.js';
 import RolesConfig from '../config/roles.config.js';
@@ -23,7 +24,7 @@ router.get('/reset', async (req, res) => {
     const token = req.query.token;
     jwt.verify(token, 'claveDeRecuperacion', (err, decoded) => {
         if (err) {
-            res.status(500).send({ status: "error", message: "El enlace ha caducado o es inválido"});
+            res.status(500).render('invalidToken', {token});
         } else {
             res.render('reset', {token});            
         }
@@ -51,7 +52,8 @@ router.get('/current', async (req, res) => {
 
 
 //product routes
-router.get('/products', RolesConfig.Authorize('user'), async (req, res) => {
+router.use('/products', productView);
+/*router.get('/products', RolesConfig.Authorize('user'), async (req, res) => {
     const user = req.session.user; 
     if(user) {
        
@@ -70,7 +72,7 @@ router.get('/products', RolesConfig.Authorize('user'), async (req, res) => {
     } else {
         res.status(404).json({error: "usuario no encontrado"});
     }
-})
+})*/
 
 //cart routes
 router.get('/carts/:cid', async (req, res) => {

@@ -1,5 +1,6 @@
 import { Router } from 'express';
 import CartsController from '../controllers/carts.controller.js';
+import RolesConfig from '../config/roles.config.js';
 
 const router = Router();
 
@@ -10,7 +11,7 @@ router.get('/:cid', CartsController.getCartById);
 router.get('/:cid/purchase', CartsController.purchaseCart);
 
 router.post('/createCart', CartsController.createCart);
-router.post('/:cid/products/:pid', CartsController.addProductToCart);
+router.post('/:cid/products/:pid', RolesConfig.Authorize(["user", "premium"]), CartsController.addProductToCart);
 
 
 router.put('/:cid/products/:pid', CartsController.updateProductInCart);

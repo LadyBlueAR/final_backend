@@ -13,8 +13,14 @@
           });
           
           if (response.ok) {
+            console.log(response);
             alert('Producto agregado al carrito con éxito');
-          } else {
+          } else if( response.status === 403) {
+            alert("Error de permisos: no posee permisos para agregar productos al carrito");
+          } else if ( response.status === 400) {
+            alert(" ERROR: No puede agregar al carrito sus propios productos");
+          }
+          else {
             console.error('Error al agregar el producto al carrito');
           }
         } catch (error) {
