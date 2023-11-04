@@ -1,5 +1,6 @@
 import passport from 'passport';
 import userDTO from '../DTOs/user.dto.js';
+import { userModel } from '../dao/mongo/models/user.model.js';
 
 export default class SessionsController {
   static async registerUser(req, res) {
@@ -24,13 +25,15 @@ export default class SessionsController {
         return res.status(400).json({ status: 'error', message: 'Credenciales inválidas' });
       }
 
-      req.login(user, (err) => {
+      req.login(user, async (err) => {
         if (err) {
           req.logger.warning("Error al iniciar sesión")
           return res.status(500).json({ status: 'error', message: 'Error al iniciar sesión' });
         }
         req.logger.info("Sesión iniciada con éxito");
         req.session.user = user;
+        const last_connection = new Date().toLocaleString('es-AR');
+        await userModel.findByIdAndUpdate(user._id, { last_connection: last_connection});
         return res.status(200).json({ status: 'success', payload: user });
       });
     })(req, res);
@@ -62,18 +65,23 @@ export default class SessionsController {
         return res.status(400).json({ status: 'error', message: 'Autenticación con GitHub fallida' });
       }
 
-      req.login(user, (err) => {
+      req.login(user, async (err) => {
         if (err) {
           req.logger.error("Error al iniciar sesión");
           return res.status(500).json({ status: 'error', message: 'Error al iniciar sesión' });
         }
         req.session.user = user;
+        const last_connection = new Date().toLocaleString('es-AR');
+        await userModel.findByIdAndUpdate(user._id, { last_connection: last_connection});
         res.redirect('/products');
       });
     })(req, res);
   }
 
   static async logoutUser(req, res) {
+    const user = req.session.user;
+    const last_connection = new Date().toLocaleString('es-AR');
+    await userModel.findByIdAndUpdate(user._id, { last_connection: last_connection});
     req.logout((err) => {
       if (err) {
         req.logger.error("Error al cerrar sesión: " + err);

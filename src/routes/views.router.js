@@ -1,9 +1,8 @@
 import { Router } from 'express';
-//import { productModel } from '../dao/mongo/models/products.model.js';
 import productView from './views/productView.router.js';
 import { cartModel } from '../dao/mongo/models/carts.model.js';
 import SessionsController from '../controllers/sessions.controller.js';
-import RolesConfig from '../config/roles.config.js';
+import RolesConfig from '../middlewares/roles.middleware.js';
 import jwt from 'jsonwebtoken';
 
 const router = Router();
@@ -13,7 +12,7 @@ router.get('/register', (req, res) => {
     res.render('register');
 });
 
-router.get('/login', (req, res) => {
+router.get('/login', async (req, res) => {
     res.render('login');
 });
 router.get('/chat', RolesConfig.Authorize('user'), (req, res) => {
@@ -31,8 +30,13 @@ router.get('/reset', async (req, res) => {
     })
 })
 
+router.get('/documents', async (req, res) => {
+    const user = req.session.user;
+    res.render('upload', {user});
+});
+
 //General routes
-router.get('/', (req, res) => { 
+router.get('/', async (req, res) => { 
     res.render('login');
 });
 

@@ -1,12 +1,12 @@
 import { Router } from 'express';
 import { productModel } from '../../dao/mongo/models/products.model.js';
-import RolesConfig from '../../config/roles.config.js';
+import RolesConfig from '../../middlewares/roles.middleware.js';
 
 
 const router = new Router();
 
 router.get('/', async (req, res) => {
-    const user = req.session.user; 
+    const user = req.session.user;
     if(user) {
        
        let prevLink = null;

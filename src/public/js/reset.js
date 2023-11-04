@@ -16,7 +16,7 @@ document.addEventListener('DOMContentLoaded', () => {
             document.getElementById('email').value = email;
         }
 
-        const response = await fetch('/api/sessions/changePassword', {
+        const response = await fetch('/api/users/changePassword', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',

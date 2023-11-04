@@ -70,11 +70,22 @@ export default class UserController {
     switch (user.rol) {
       case "user":
         await userModel.findByIdAndUpdate(uid, { rol: "premium"});
+        res.status(200).json({ status: "success", message: `El usuario ${user.email} es ahora un usuario premium`});
         break;
       case "premium":
         await userModel.findByIdAndUpdate(uid, { rol: "user"});
+        res.status(200).json({ status: "success", message: `El usuario ${user.email} es ahora un usuario común`});
         break;
     }
-    res.send("ruta de cambio de usuarios");
+    
+  }
+
+  static async uploadDoc (req, res) {
+    if (!req.file) {
+      return res.status(400).send({status: "error", message: "No se pudo guardar la imagen"});
+    }
+    const user = req.session.user;
+    return res.status(201).send({status: "success", message: "Imagen cargada con éxito"});
+    //await userModel.findByIdAndUpdate(user.email, { documents: req.file});
   }
 }

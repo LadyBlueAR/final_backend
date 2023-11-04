@@ -72,7 +72,7 @@ document.addEventListener('DOMContentLoaded', (e) => {
 });
 
 document.addEventListener('DOMContentLoaded', (e) => {
-    document.querySelector('a[href="/api/sessions/passReset"]').addEventListener('click', function (e) {
+    document.querySelector('a[href="/api/users/passReset"]').addEventListener('click', function (e) {
         e.preventDefault();
         const signInContainer = document.querySelector('.sign-in-container');
         const resetPasswordContainer = document.querySelector('.reset-password-container');
@@ -91,7 +91,7 @@ document.addEventListener('DOMContentLoaded', (e) => {
               formDataJSON[key] = value;
           });
   
-          const response = await fetch('/api/sessions/passReset', {
+          const response = await fetch('/api/users/passReset', {
               method: 'POST',
               headers: {
                   'Content-Type': 'application/json',

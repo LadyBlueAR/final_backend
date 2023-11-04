@@ -1,6 +1,5 @@
 import { Router } from 'express';
 import ProductsController from '../controllers/products.controller.js';
-import RolesConfig from '../config/roles.config.js';
 
 const router = new Router();
 
