@@ -2,33 +2,27 @@ import multer from 'multer';
 import path from 'path';
 import __dirname from '../utils.js';
 
-function getFolder(req, file, cb) {
-
-    const fileType = req.params.fileType;
-    let folder = '';    
-    switch (fileType) {
-        case 'profile':
-            folder = 'public/img/profile';
-            break;
-        case 'product' :
-            folder = 'public/img/products';
-            break;
-        case 'document' :
-            folder = 'public/documents';
-            break;
-    }
-
-    return cb(null, path.join(__dirname, folder));
-}
 
 const storage = multer.diskStorage( {
-    destination: getFolder,
+    destination: function (req, file, cb) {
+        const fileType = file.fieldname;
+        cb(null, `./src/public/${fileType}`)
+      },
     filename: function(req, file, cb) {
+
         const uid = req.params.uid;
-        const fileType = req.params.fileType;
+        const fileType = file.fieldname;
+        const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9)
         const fileExtension = path.extname(file.originalname);
-        const formattedFilename = `${uid}_${fileType}${fileExtension}`;
-        cb(null,formattedFilename);
+        const documentType = req.body.documentType
+        if (documentType) {
+            const formattedFilename = `${uid}_${fileType}_${documentType}_${uniqueSuffix}${fileExtension}`;
+            cb(null,formattedFilename);
+        } else {
+            const formattedFilename = `${uid}_${fileType}_${uniqueSuffix}${fileExtension}`;
+            cb(null,formattedFilename);
+        }
+        
     }
 })
 

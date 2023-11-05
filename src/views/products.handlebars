@@ -1,7 +1,7 @@
 <div class="products">
     <h1>Hola {{user.first_name}} {{user.last_name}}</h1>
     <button id="logout">Cerrar Sesión</button>
-    <h1 style="text-align: center;">Lista De Productos</h1>
+    <h1 style="text-align: center;">Lista De Productos</h1>    
     <div class="container product-container">
  <ul>
         {{#each products}}
@@ -9,7 +9,7 @@
                 <h2>{{this.title}}</h2>
                 <p>{{this.description}}</p>
                 <p>Precio: {{this.price}}</p>
-                <button type="submit" id="{{this._id}}" class="addToCart" userCart="{{user.cart}}">Agregar al Carrito</button>  
+                <button type="submit" id="{{this._id}}" class="addToCart" userCart="{{../user.cart}}">Agregar al Carrito</button>  
                 <button type="button" productId="{{this._id}}" class="deleteProduct">Eliminar Producto</button>
             </li>
         {{/each}}
@@ -28,13 +28,13 @@
     <a href="{{nextLink}}"><button>Siguiente</button></a>
     {{/if}}
     </div>  
-    <a href="./carts/{{user.cart}}"><button>Ver Carrito</button></a>
+    <a href="/carts/{{user.cart}}"><button>Ver Carrito</button></a>
     </div>  
 </div>
-<script src="./js/login.js"></script>
-<script type="module" src="./js/addToCart.js"></script>
-<script type="module" src="./js/createCart.js"></script>
-<script type="module" src="./js/deleteProduct.js"></script>
+<script src="/js/login.js"></script>
+<script type="module" src="/js/addToCart.js"></script>
+<script type="module" src="/js/createCart.js"></script>
+<script type="module" src="/js/deleteProduct.js"></script>
 
 
 

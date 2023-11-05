@@ -1,4 +1,5 @@
 import MailingService from "../services/mailing.service.js";
+import UserDTO from "../DTOs/user.dto.js";
 import { userModel } from "../dao/mongo/models/user.model.js";
 import jwt from 'jsonwebtoken';
 import { createHash } from "../utils.js";
@@ -67,25 +68,103 @@ export default class UserController {
   static async changeRole ( req, res) {
     const { uid } = req.params;
     const user = await userModel.findById(uid);
-    switch (user.rol) {
-      case "user":
-        await userModel.findByIdAndUpdate(uid, { rol: "premium"});
-        res.status(200).json({ status: "success", message: `El usuario ${user.email} es ahora un usuario premium`});
-        break;
-      case "premium":
-        await userModel.findByIdAndUpdate(uid, { rol: "user"});
-        res.status(200).json({ status: "success", message: `El usuario ${user.email} es ahora un usuario común`});
-        break;
+
+    if (user.rol === "user" && user.status === true) {
+      await userModel.findByIdAndUpdate(uid, { rol: "premium"});
+      return res.status(200).json({ status: "success", message: `El usuario ${user.email} es ahora un usuario premium`});
+    } else if (user.rol === "user" && user.status === false) {
+      return res.status(404).json({status: "error", message: `El usuario ${user.email} no puede ser pasado a premium debido a que le faltan cargar documentos.` });
+    } else if (user.rol === "premium") {
+      await userModel.findByIdAndUpdate(uid, { rol: "user"});
+      res.status(200).json({ status: "success", message: `El usuario ${user.email} es ahora un usuario común`});
     }
-    
   }
 
-  static async uploadDoc (req, res) {
+  static async uploadSingle (req, res) {
     if (!req.file) {
       return res.status(400).send({status: "error", message: "No se pudo guardar la imagen"});
     }
     const user = req.session.user;
-    return res.status(201).send({status: "success", message: "Imagen cargada con éxito"});
-    //await userModel.findByIdAndUpdate(user.email, { documents: req.file});
+    const file = req.file;
+    try {
+      const uploadedFile = {
+        name: file.filename,
+        reference: file.path
+      }
+      await userModel.findByIdAndUpdate(user._id, {
+        $push: {documents: uploadedFile}
+      });
+      return res.status(201).send({status: "success", message: "Imagen cargada con éxito"});
+    } catch (error) {
+      return res.status(400).send({status: "error", message: "No se pudo actualizar el usuario en la base de datos"});
+    }
+  }
+
+  static async uploadMultiple(req, res) {
+    if (!req.files || req.files.length === 0) {
+      return res.status(400).send({ status: "error", message: "No se pudieron guardar las imágenes" });
+    }
+    const user = req.session.user;
+    const uploadedFiles = req.files.map(file => {
+      return {
+        name: file.filename,
+        reference: file.path
+      }
+    });
+
+    try {
+      for (const file of uploadedFiles) {
+        await userModel.findByIdAndUpdate(user._id, { 
+          $push: { documents: file }
+        });
+      }  
+      res.status(201).send({ status: "success", message: "Imágenes cargadas con éxito", uploadedFiles });
+    } catch (error) {
+      res.status(500).send({ status: "error", message: "Error al actualizar el usuario en la base de datos" });
+    }
+
+  }
+
+  static async getAllUsers(req, res) {
+    const users = await userModel.find();
+    const userDTO = [];
+
+    for (const user of users) {
+      const userDTOInstance = new UserDTO(user);
+      userDTO.push(userDTOInstance);
+    }
+    res.status(200).json({ status : "success", payload: userDTO});    
+  }
+
+  static async deleteInactive(req,res) {
+    const users = await userModel.find();
+    const currentDate = new Date();
+    const usersDeleted = [];
+
+    for (const user of users) {
+      const last_connection = user.last_connection;
+      const last_connectionDate = new Date(last_connection);
+      const timeDifference = currentDate - last_connectionDate;
+      const minutesDifference = timeDifference / (1000 * 60);
+      if (minutesDifference > 1) {
+        await userModel.findByIdAndRemove(user._id);
+        usersDeleted.push(user.email);
+      }
+    }
+    if (usersDeleted.length > 0) { 
+      return res.status(200).send("Los siguientes usuarios fueron eliminados por inactividad: " + JSON.stringify(usersDeleted));
+    } else {
+      return res.status(200).send("No hay usuarios inactivos");
+    }
+  }
+  
+  static async deleteUser (req, res) {
+    const uid = req.params.uid;
+    try {
+      await userModel.findByIdAndDelete(uid);
+      return res.status(201).send("Usuario Eliminado");
+    } catch (error) {
+      return res.status(500).send("No se pudo eliminar el usuario");
+    }
   }
 }

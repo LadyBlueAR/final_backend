@@ -32,7 +32,7 @@ export default class SessionsController {
         }
         req.logger.info("Sesión iniciada con éxito");
         req.session.user = user;
-        const last_connection = new Date().toLocaleString('es-AR');
+        const last_connection = new Date();
         await userModel.findByIdAndUpdate(user._id, { last_connection: last_connection});
         return res.status(200).json({ status: 'success', payload: user });
       });
@@ -71,7 +71,7 @@ export default class SessionsController {
           return res.status(500).json({ status: 'error', message: 'Error al iniciar sesión' });
         }
         req.session.user = user;
-        const last_connection = new Date().toLocaleString('es-AR');
+        const last_connection = new Date();
         await userModel.findByIdAndUpdate(user._id, { last_connection: last_connection});
         res.redirect('/products');
       });
@@ -80,7 +80,7 @@ export default class SessionsController {
 
   static async logoutUser(req, res) {
     const user = req.session.user;
-    const last_connection = new Date().toLocaleString('es-AR');
+    const last_connection = new Date();
     await userModel.findByIdAndUpdate(user._id, { last_connection: last_connection});
     req.logout((err) => {
       if (err) {

@@ -8,7 +8,6 @@ const router = new Router();
 router.get('/', async (req, res) => {
     const user = req.session.user;
     if(user) {
-       
        let prevLink = null;
        let nextLink = null;
    
@@ -20,7 +19,7 @@ router.get('/', async (req, res) => {
        const products = docs;
        if (hasPrevPage) prevLink = `http://localhost:8080/products?limit=${limit}&page=${parseInt(page)-1}`;
        if (hasNextPage) nextLink = `http://localhost:8080/products?limit=${limit}&page=${parseInt(page)+1}`;
-       res.render('products', {products, hasPrevPage, hasNextPage, prevLink, nextLink, user});
+       res.render('products', {user, products, hasPrevPage, hasNextPage, prevLink, nextLink});
     } else {
         res.status(404).json({error: "usuario no encontrado"});
     }

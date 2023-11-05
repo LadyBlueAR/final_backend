@@ -1,10 +1,13 @@
 import { productModel } from "../dao/mongo/models/products.model.js";
+import { userModel } from "../dao/mongo/models/user.model.js";
 import ProductsService from "../services/products.service.js";
+import MailingService from "../services/mailing.service.js";
 import CustomError from "../utils/errors/custom.errors.js";
 import EErrors from "../utils/errors/enum.errors.js";
 import { generateProductErrorInfo } from "../utils/errors/info.errors.js";
 
 const ps = new ProductsService();
+const ms = new MailingService();
 
 export default class ProductsController {
     static async getProducts(req, res) {
@@ -107,10 +110,29 @@ export default class ProductsController {
         const { pid } = req.params;
         const user = req.session.user;
         const product = await ps.getProductById(pid);
+        let ownerPremium = false;
+        if ( product.owner != "admin") {
+            const productOwner = await userModel.findOne({ email: product.owner});
+            if (productOwner.rol === "premium") {
+                ownerPremium = true;
+            }
+        }        
         try {
             if (user.rol === "admin" || user.email === product.owner) {
                 const result = await ps.deleteProduct(pid);
                 req.logger.info("Producto Eliminado");
+                if (ownerPremium === true) {
+                    ms.sendSimpleMail({
+                        from: 'anabelag1991@gmail.com',
+                        to: product.owner,
+                        subject: 'Aviso de Producto Eliminado',
+                        html: `
+                        <h1>Su Producto Fue Eliminado</h1>
+              <p>Este es un aviso de que su producto ${product.title} fue eliminado de nuestra base de datos.</p>
+            `,
+                    attachments: []
+                    })
+                }            
                 res.status(204).json({ message: 'Producto Eliminado', payload: result });
             } else {
                 res.status(404).json("No tiene permisos para eliminar este producto");

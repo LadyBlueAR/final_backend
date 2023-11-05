@@ -1,13 +1,29 @@
-<div class="container">
-  <form id="upload-form" user="{{user._id}}" enctype="multipart/form-data">
-    <input type="file" name="file" id="file">
-    <select name="fileType" id="fileType">
-      <option value="profile">Imagen de Perfil</option>
-      <option value="product">Producto</option>
-      <option value="document">Documento</option>
-    </select>
-    <input type="submit" value="Subir Archivo">
+<h1>Plataforma de Carga de Archivos</h1>
+<div style="display: flex; flex-direction:column;">
+  <form  user="{{user._id}}" style="border-bottom: 1px solid #333" id="profileForm" enctype="multipart/form-data">
+   <h3>Imagen de Perfil</h3>
+        <input type="file" name="profile" accept="image/*">
+        <input type="submit" value="Cargar Imagen de Perfil" class="btn">
   </form>
+   <form user="{{user._id}}" style="border-bottom: 1px solid #333" id="productForm" enctype="multipart/form-data">
+        <h3>Imágenes de Productos</h3>
+        <input type="file" name="products" multiple accept="image/*">
+        <input type="submit" value="Cargar Imágenes" class="btn">
+    </form>
+    <form user="{{user._id}}" id="documentForm" enctype="multipart/form-data">
+    <h3>Documentos</h3>
+    <label for="documentType">Tipo de Documento:</label>
+    <select name="documentType" id="documentType">
+        <option value="idDocument">Identificación</option>
+        <option value="proofOfAddress">Comprobante de Domicilio</option>
+        <option value="bankStatement">Comprobante de Estado de Cuenta</option>
+    </select>
+    <br>
+    <label for="documents">Documento:</label>
+    <input type="file" name="documents" accept=".pdf, .txt, .doc, .docx" multiple>
+    <br>
+    <input type="submit" value="Cargar Documento" class="btn">
+</form>
 </div>
 <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script src="/js/upload.js"></script>

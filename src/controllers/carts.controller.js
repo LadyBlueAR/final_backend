@@ -41,16 +41,13 @@ export default class CartsController {
     const { pid } = req.params;
     const cid = req.session.user.cart;
     const email = req.session.user.email;
-
     try {
         const product = await ps.getProductById(pid);
-      
         if (!cid) {
             const newCart = await cs.createCart(); 
             req.session.user.cart = newCart._id;
             await userModel.findOneAndUpdate({ _id: req.session.user._id }, { cart: newCart._id });
         }
-
         if ( email === product.owner) {
           res.status(400).json({ message: "No puede agregar al carrito un producto propio"});
         }  else {
@@ -137,9 +134,9 @@ export default class CartsController {
       const newTicket = await ts.createTicket(purchase_datetime, amount, purchaser);
   
       if (insufficientStock) {
-        res.render('ticket', { ticket: { purchase_datetime, amount, purchaser, code: newTicket.code, insufficientStockProducts }});
+        res.render('ticket', { ticket: { purchase_datetime, amount, purchaser, code: newTicket.code, insufficientStockProducts }, user: req.session.user});
       } else {
-        res.render('ticket', { ticket: { purchase_datetime, amount, purchaser, code: newTicket.code } });
+        res.render('ticket', { ticket: { purchase_datetime, amount, purchaser, code: newTicket.code }, user: req.session.user });
       }
     } catch (error) {
       res.status(500).json({ error: `Error al finalizar la compra: ${error.message}` });

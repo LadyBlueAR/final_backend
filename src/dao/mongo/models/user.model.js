@@ -13,13 +13,15 @@ const userSchema = new mongoose.Schema({
         ref: 'carts',
         default: null,
       },
-    documents: {
-      name: {type: String},
-      reference: {type: String},
-      default: []
-    },
+    documents: [
+      {
+        name: { type: String },
+        reference: { type: String },
+      },
+    ],
     rol: { type: String, default: 'user' },
-    last_connection: { type: String, default: null },
+    status: { type: Boolean, required: true, default: false},
+    last_connection: { type: Date, default: Date },
     resetToken: {type: String, default: null}
 });
   

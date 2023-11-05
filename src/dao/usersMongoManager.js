@@ -56,10 +56,4 @@ export default class UsersMongoManager {
     }
   }
 
-  async asignCartToUser(id) {
-    try {
-    } catch (error) {
-      
-    }
-  }
 }

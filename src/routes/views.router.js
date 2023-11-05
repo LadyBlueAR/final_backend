@@ -1,6 +1,7 @@
 import { Router } from 'express';
 import productView from './views/productView.router.js';
 import { cartModel } from '../dao/mongo/models/carts.model.js';
+import { userModel } from '../dao/mongo/models/user.model.js';
 import SessionsController from '../controllers/sessions.controller.js';
 import RolesConfig from '../middlewares/roles.middleware.js';
 import jwt from 'jsonwebtoken';
@@ -89,8 +90,10 @@ export default router;
 
 //admin routes
 
-router.get('/admin', RolesConfig.Authorize('admin'), (req, res) => {
-    res.render('admin');
+router.get('/admin', RolesConfig.Authorize('admin'), async (req, res) => {
+    const allUsers = await userModel.find().lean();
+    const users = allUsers.filter (user => user.rol !== "admin");
+    res.render('admin', {users});
 })
 
 
