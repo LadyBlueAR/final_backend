@@ -42,12 +42,14 @@ document.addEventListener('DOMContentLoaded', () => {
   const btnAdmin = document.getElementById("btnAdmin");
   const btnDocuments = document.getElementById("btnDocuments");
   const btnCreate = document.getElementById("btnCreate");
+  const btnCart = document.getElementById("cartButton");S
 
   const rol = btnAdmin.getAttribute("rol").valueOf();
 
   if (rol === "admin") {
     btnAdmin.style.visibility = "visible";
     btnCreate.style.visibility = "visible";
+    btnCart.style.display = "none";
   } else if (rol === "premium") {
     btnDocuments.style.visibility = "visible";
     btnCreate.style.visibility = "visible";
