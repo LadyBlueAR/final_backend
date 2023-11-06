@@ -42,7 +42,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const btnAdmin = document.getElementById("btnAdmin");
   const btnDocuments = document.getElementById("btnDocuments");
   const btnCreate = document.getElementById("btnCreate");
-  const btnCart = document.getElementById("cartButton");S
+  const btnCart = document.getElementById("cartButton");
 
   const rol = btnAdmin.getAttribute("rol").valueOf();
 
