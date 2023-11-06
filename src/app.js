@@ -22,7 +22,7 @@ import views from './routes/views.router.js';
 const isDev = process.env.NODE_ENV === 'development';
 const addLogger = isDev ? addLoggerDev : addLoggerProd;
 
-const port = 8080;
+const port = process.env.PORT||8080;
 const messages = [];
 const app = express();
 const httpServer = app.listen(port, () => { console.log(`Server listening at http://localhost:${port}`); });
