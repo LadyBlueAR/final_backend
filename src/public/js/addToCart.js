@@ -3,8 +3,10 @@ document.addEventListener('DOMContentLoaded', () => {
   const btnAddToCart = document.querySelectorAll('.addToCart');
   btnAddToCart.forEach(button => {
     button.addEventListener('click', async (event) => {
-      
-      const productId = event.target.id;   
+
+      const productId = event.target.id;  
+      const btnCart = document.getElementById("cartButton");
+      const cid = btnCart.getAttribute('cid') ? btnCart.getAttribute('cid').valueOf() : null;
 
       try {
         const response = await fetch(`/api/carts/addToCart/${productId}`, {
@@ -13,6 +15,7 @@ document.addEventListener('DOMContentLoaded', () => {
         
         if (response.ok) {
           alert('Producto agregado al carrito con éxito');
+          if (!cid) { window.location.reload();}
         } else if( response.status === 403) {
           Swal.fire({
             icon: 'error',
@@ -44,17 +47,22 @@ document.addEventListener('DOMContentLoaded', () => {
   const btnCreate = document.getElementById("btnCreate");
   const btnCart = document.getElementById("cartButton");
 
+  const cid = btnCart.getAttribute("userCart").valueOf();
   const rol = btnAdmin.getAttribute("rol").valueOf();
 
+  if (!cid) {
+    btnCart.style.display = "none";
+  }
+
   if (rol === "admin") {
-    btnAdmin.style.visibility = "visible";
-    btnCreate.style.visibility = "visible";
+    btnAdmin.style.display = "inline";
+    btnCreate.style.inline = "inline";
     btnCart.style.display = "none";
   } else if (rol === "premium") {
-    btnDocuments.style.visibility = "visible";
-    btnCreate.style.visibility = "visible";
+    btnDocuments.style.display = "inline";
+    btnCreate.style.display = "inline";
   } else if ( rol === "user") {
-    btnDocuments.style.visibility = "visible";
+    btnDocuments.style.display = "inline";
   }
 
 })

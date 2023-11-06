@@ -1,9 +1,9 @@
 <div class="products">
     <h1>Hola {{user.first_name}} {{user.last_name}}</h1>
     <button id="logout">Cerrar Sesión</button>
-    <a href="/admin"><button id="btnAdmin" style="visibility: hidden;" rol="{{user.rol}}">Panel de admin</button></a>
-    <a href="/documents"><button id="btnDocuments" style="visibility: hidden;" rol="{{user.rol}}">Cargar Documentos</button></a>      
-    <a href="/products/create"><button id="btnCreate" style="visibility: hidden;" rol="{{user.rol}}">Crear Producto</button></a>
+    <a href="/admin"><button id="btnAdmin" style="display: none;" rol="{{user.rol}}">Panel de admin</button></a>
+    <a href="/documents"><button id="btnDocuments" style="display: none;" rol="{{user.rol}}">Cargar Documentos</button></a>      
+    <a href="/products/create"><button id="btnCreate" style="display: none;" rol="{{user.rol}}">Crear Producto</button></a>
     <h1 style="text-align: center;">Lista De Productos</h1>    
     <div class="container product-container">        
  <ul>
@@ -31,7 +31,7 @@
     <a href="{{nextLink}}"><button>Siguiente</button></a>
     {{/if}}
     </div>  
-    <a href="/carts/{{user.cart}}" id="cartButton"><button>Ver Carrito</button></a>
+    <a href="/carts/{{user.cart}}"><button id="cartButton" userCart="{{user.cart}}">Ver Carrito</button></a>
     </div>  
 </div>
 <script src="/js/login.js"></script>
