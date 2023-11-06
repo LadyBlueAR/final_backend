@@ -1,7 +1,8 @@
 <div>
 <div class="container">
     <h1 style="text-align: center; margin: 5px;">CART ID : {{cart._id}}</h1>
-    <ul>
+    <h2 id="headerEmpty" style="visibility: hidden;" empty="{{empty}}">Carrito Vacio</h2>
+    <ul id="cartProducts">
         {{#each products}}
             <li style="display: flex; justify-content: space-around;">
                 <p>{{this.product.title}}</p>
@@ -15,3 +16,7 @@
     <p>Total: {{cart.total}}</p>
 </div>
 <a href="/api/carts/{{cart._id}}/purchase"><button id="purchase">Finalizar Compra</button></a>
+<button id="empty" idCart="{{cart._id}}">Vaciar Carrito</button></a>
+<a href="/products"><button>Volver a la Tienda</button></a>
+</div>
+<script src="/js/deleteCart.js"></script>

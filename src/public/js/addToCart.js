@@ -4,21 +4,29 @@ document.addEventListener('DOMContentLoaded', () => {
   btnAddToCart.forEach(button => {
     button.addEventListener('click', async (event) => {
       
-      const cartId = button.getAttribute('userCart').valueOf();
-      console.log(cartId);
       const productId = event.target.id;   
 
       try {
-        const response = await fetch(`/api/carts/${cartId}/products/${productId}`, {
+        const response = await fetch(`/api/carts/addToCart/${productId}`, {
           method: 'POST',
         });
         
         if (response.ok) {
           alert('Producto agregado al carrito con éxito');
         } else if( response.status === 403) {
-          alert("Error de permisos: no posee permisos para agregar productos al carrito");
+          Swal.fire({
+            icon: 'error',
+            title: 'Error de permisos',
+            confirmButtonColor: '#FF4B2B',
+            text: 'El administrador no puede agregar productos al carrito.',
+        });
         } else if ( response.status === 400) {
-          alert(" ERROR: No puede agregar al carrito sus propios productos");
+          Swal.fire({
+            icon: 'error',
+            title: 'Error de permisos',
+            confirmButtonColor: '#FF4B2B',
+            text: 'No puede agregar sus propios productos al carrito.',
+        });
         }
         else {
           console.error('Error al agregar el producto al carrito');
@@ -29,3 +37,22 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
 });
+
+document.addEventListener('DOMContentLoaded', () => {
+  const btnAdmin = document.getElementById("btnAdmin");
+  const btnDocuments = document.getElementById("btnDocuments");
+  const btnCreate = document.getElementById("btnCreate");
+
+  const rol = btnAdmin.getAttribute("rol").valueOf();
+
+  if (rol === "admin") {
+    btnAdmin.style.visibility = "visible";
+    btnCreate.style.visibility = "visible";
+  } else if (rol === "premium") {
+    btnDocuments.style.visibility = "visible";
+    btnCreate.style.visibility = "visible";
+  } else if ( rol === "user") {
+    btnDocuments.style.visibility = "visible";
+  }
+
+})

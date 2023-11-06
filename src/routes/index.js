@@ -16,8 +16,4 @@ router.use('/users', usersRouter);
 router.use('/mockingproducts', mockingRouter);
 router.use('/loggerTest', loggerTest);
 
-/*router.post('/products', (req, res) => {
-    res.send("Producto agregado al carrito");
-})*/
-
 export default router;

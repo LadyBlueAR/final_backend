@@ -5,7 +5,7 @@
         <input type="file" name="profile" accept="image/*">
         <input type="submit" value="Cargar Imagen de Perfil" class="btn">
   </form>
-   <form user="{{user._id}}" style="border-bottom: 1px solid #333" id="productForm" enctype="multipart/form-data">
+   <form user="{{user._id}}" rol="{{user.rol}}" style="border-bottom: 1px solid #333" id="productForm" enctype="multipart/form-data">
         <h3>Imágenes de Productos</h3>
         <input type="file" name="products" multiple accept="image/*">
         <input type="submit" value="Cargar Imágenes" class="btn">
@@ -25,5 +25,4 @@
     <input type="submit" value="Cargar Documento" class="btn">
 </form>
 </div>
-<script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script src="/js/upload.js"></script>

@@ -3,6 +3,11 @@ document.addEventListener('DOMContentLoaded', () => {
     const productForm = document.getElementById('productForm');
     const documentForm = document.getElementById('documentForm');
 
+    const rol = productForm.getAttribute('rol').valueOf();
+    if (rol === "user") {
+        productForm.style.visibility = 'hidden';
+    }
+
     profileForm.addEventListener('submit', async (event) => {
         event.preventDefault();
         const formData = new FormData(profileForm);
@@ -30,6 +35,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         const uId = productForm.getAttribute('user').valueOf();
 
+        console.log(rol);
         const response = await fetch(`/api/users/${uId}/documents/products`, {
             method: 'POST',
             body: formData,

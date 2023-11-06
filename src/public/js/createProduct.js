@@ -19,10 +19,8 @@ document.addEventListener('DOMContentLoaded', () => {
         });
 
         if (response.status === 201) {
-            // La solicitud se completó con éxito, puedes redirigir a la página deseada
             window.location.href = '/api/products';
         } else {
-            // Manejar errores aquí
         }
     });
 });

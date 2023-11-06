@@ -12,10 +12,21 @@ document.addEventListener('DOMContentLoaded', () => {
           });
           
           if (response.ok) {
-            alert('Producto eliminado con éxito');
-            window.location.replace('/products');            
+            Swal.fire({
+              icon: 'success',
+              title: 'Producto Eliminado',
+              confirmButtonColor: '#FF4B2B',
+              text: "El producto se ha eliminado de la base de datos",
+          }).then(() => {
+            location.reload();
+          });           
           } else if (response.status === 404) {
-            alert("Error de permisos: No posee permisos para eliminar este producto");
+            Swal.fire({
+              icon: 'error',
+              title: 'Error de Permisos',
+              confirmButtonColor: '#FF4B2B',
+              text: "No posee permisos para eliminar este producto",
+          });
           }
           else {
             console.error('Error al eliminar el producto');

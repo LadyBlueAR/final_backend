@@ -22,7 +22,7 @@ export default class UserController {
         const resetToken = jwt.sign(
             { email: user.email },
             'claveDeRecuperacion',
-            { expiresIn: '1m' }
+            { expiresIn: '20m' }
           );
 
         const hashedResetToken = await createHash(resetToken);
@@ -32,7 +32,7 @@ export default class UserController {
         await ms.sendSimpleMail({
             from: 'anabelag1991@gmail.com',
             to: mail,
-            subject: 'Prueba Link Recuperación',
+            subject: 'Link de Recuperación de Contraseña',
             html: `
   <p>Haz clic en el siguiente enlace para restablecer tu contraseña:</p>
   <a href="http://localhost:8080/reset?token=${resetToken}&email=${mail}">Restablecer contraseña</a>
@@ -48,20 +48,19 @@ export default class UserController {
   static async changePassword (req, res){
     const { newPassword, confirmPassword, email } = req.body;
     const user = await userModel.findOne({ email: email });
+    if (!user) {
+      return res.status(404).json({message: "Usuario no encontrado"});
+    }
     const isPasswordMatch = await bcrypt.compareSync(newPassword, user.password);
     if (isPasswordMatch) {
-        console.log("La contraseña nueva no puede ser igual a la anterior");
-        return res.status(400).json({ error: "La nueva contraseña no puede ser igual a la anterior" });
+        return res.status(400).json({ status: "error", message: "La nueva contraseña no puede ser igual a la anterior" });
     } else if(newPassword != confirmPassword) {
-        console.log("Las contraseñas no coinciden");
-        return res.status(404).json({ error: "Las contraseñas no coinciden"});
+        return res.status(401).json({ message: "Las contraseñas no coinciden"});
     } else {
-        console.log("LA CONTRASEÑA SE CAMBIARA");
         const hashedPassword = await createHash(newPassword);
         user.password = hashedPassword;
         user.save();
-        res.render('login');
-        //return res.status(200).json({ status: "success", message:"Contraseña cambiada con éxito"});
+        res.status(200).render('login');
     }
   }
 

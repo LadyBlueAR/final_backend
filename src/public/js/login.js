@@ -60,18 +60,6 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 document.addEventListener('DOMContentLoaded', (e) => {
-    const products = document.querySelectorAll('[id^="btn_add_"]');
-    
-    products.forEach((btnAddToCart) => {
-        btnAddToCart.addEventListener('click', () => {
-            const idParts = btnAddToCart.id.split('_');
-            const productId = idParts[idParts.length - 1];
-            console.log(`Estoy clickeando en el botón con ID ${productId}`);
-        });
-    });
-});
-
-document.addEventListener('DOMContentLoaded', (e) => {
     document.querySelector('a[href="/api/users/passReset"]').addEventListener('click', function (e) {
         e.preventDefault();
         const signInContainer = document.querySelector('.sign-in-container');
@@ -102,7 +90,6 @@ document.addEventListener('DOMContentLoaded', (e) => {
           const responseData = await response.json();
   
           if (responseData.status === 'success') {
-            console.log("Redirigiendo...")
               window.location.replace('/');
           } else {
               Swal.fire({

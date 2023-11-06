@@ -23,6 +23,31 @@ document.addEventListener('DOMContentLoaded', () => {
             },
             body: JSON.stringify(formDataJSON),
         });
+
+        if (response.status === 400) {
+            Swal.fire({
+                icon: 'error',
+                title: 'Error al modificar la contraseña',
+                confirmButtonColor: '#FF4B2B',
+                text: "La nueva contraseña no puede ser igual a la anterior",
+            });
+        } else if (response.status === 401 ) {
+            Swal.fire({
+                icon: 'error',
+                title: 'Error al modificar la contraseña',
+                confirmButtonColor: '#FF4B2B',
+                text: "Las contraseñas no coinciden",
+            });
+        } else if (response.status === 200) {
+            Swal.fire({
+                icon: 'success',
+                title: 'Constraseña Cambiada',
+                confirmButtonColor: '#FF4B2B',
+                text: "La contraseña fue cambiada con éxito. Será redirigido a la página de login",
+            }).then(() => {
+                window.location.replace("/login");
+              });  
+        }
     });
 
 });

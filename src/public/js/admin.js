@@ -1,7 +1,6 @@
 document.addEventListener('DOMContentLoaded', () => {
     const userList = document.querySelector("ul");
-
-    // Agregar un solo manejador de eventos a la lista de usuarios
+    
     userList.addEventListener("click", async (event) => {
         const target = event.target;
 
