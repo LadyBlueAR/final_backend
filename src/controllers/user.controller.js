@@ -22,7 +22,7 @@ export default class UserController {
         const resetToken = jwt.sign(
             { email: user.email },
             'claveDeRecuperacion',
-            { expiresIn: '20m' }
+            { expiresIn: '1h' }
           );
 
         const hashedResetToken = await createHash(resetToken);
@@ -144,8 +144,8 @@ export default class UserController {
       const last_connection = user.last_connection;
       const last_connectionDate = new Date(last_connection);
       const timeDifference = currentDate - last_connectionDate;
-      const minutesDifference = timeDifference / (1000 * 60);
-      if (minutesDifference > 1) {
+      const minutesDifference = timeDifference / (1000 * 60 * 60);
+      if (minutesDifference > 48) {
         await userModel.findByIdAndRemove(user._id);
         usersDeleted.push(user.email);
       }

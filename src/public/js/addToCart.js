@@ -56,7 +56,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   if (rol === "admin") {
     btnAdmin.style.display = "inline";
-    btnCreate.style.inline = "inline";
+    btnCreate.style.display = "inline";
     btnCart.style.display = "none";
   } else if (rol === "premium") {
     btnDocuments.style.display = "inline";
