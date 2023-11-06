@@ -35,7 +35,7 @@ export default class UserController {
             subject: 'Link de Recuperación de Contraseña',
             html: `
   <p>Haz clic en el siguiente enlace para restablecer tu contraseña:</p>
-  <a href="http://localhost:8080/reset?token=${resetToken}&email=${mail}">Restablecer contraseña</a>
+  <a href="https://ecommerce-coder-guet.onrender.com/reset?token=${resetToken}&email=${mail}">Restablecer contraseña</a>
 `,
             attachments: []
         })

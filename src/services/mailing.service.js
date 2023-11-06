@@ -6,8 +6,8 @@ export default class MailingService {
       service: 'gmail',
       port: 587,
       auth: {
-        user: 'anabelag1991@gmail.com',
-        pass: 'csdn ofkl gnsa wltp',
+        user: process.env.MAIL_USER,
+        pass: process.env.MAIL_PASS,
       },
     });
   }

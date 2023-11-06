@@ -17,8 +17,8 @@ router.get('/', async (req, res) => {
        const {docs, hasPrevPage, hasNextPage, prevPage, nextPage, ...rest} =
        await productModel.paginate({}, {limit, page, lean: true});
        const products = docs;
-       if (hasPrevPage) prevLink = `http://localhost:8080/products?limit=${limit}&page=${parseInt(page)-1}`;
-       if (hasNextPage) nextLink = `http://localhost:8080/products?limit=${limit}&page=${parseInt(page)+1}`;
+       if (hasPrevPage) prevLink = `https://ecommerce-coder-guet.onrender.com/products?limit=${limit}&page=${parseInt(page)-1}`;
+       if (hasNextPage) nextLink = `https://ecommerce-coder-guet.onrender.com/products?limit=${limit}&page=${parseInt(page)+1}`;
        res.render('products', {user, products, hasPrevPage, hasNextPage, prevLink, nextLink});
     } else {
         res.status(404).json({error: "usuario no encontrado"});

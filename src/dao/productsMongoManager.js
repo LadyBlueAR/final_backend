@@ -8,10 +8,10 @@ export default class ProductsMongoManager {
     
           const products = docs;
           const prevLink = hasPrevPage
-            ? `http://localhost:8080/api/products?limit=${limit}&page=${parseInt(page) - 1}&disponible=${disponible}&sort=${sortOpt}${catQuery}`
+            ? `https://ecommerce-coder-guet.onrender.com/api/products?limit=${limit}&page=${parseInt(page) - 1}&disponible=${disponible}&sort=${sortOpt}${catQuery}`
             : null;
           const nextLink = hasNextPage
-            ? `http://localhost:8080/api/products?limit=${limit}&page=${parseInt(page) + 1}&disponible=${disponible}&sort=${sortOpt}${catQuery}`
+            ? `https://ecommerce-coder-guet.onrender.com/api/products?limit=${limit}&page=${parseInt(page) + 1}&disponible=${disponible}&sort=${sortOpt}${catQuery}`
             : null;
     
           return {

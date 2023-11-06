@@ -47,11 +47,11 @@ export default class ProductsController {
             };
     
             if (productsData.hasPrevPage) {
-                response.prevLink = `http://localhost:8080/api/products?limit=${limit}&page=${productsData.prevPage}&disponible=${disponible}&sort=${sortOpt}${catQuery}`;
+                response.prevLink = `https://ecommerce-coder-guet.onrender.com/api/products?limit=${limit}&page=${productsData.prevPage}&disponible=${disponible}&sort=${sortOpt}${catQuery}`;
             }
     
             if (productsData.hasNextPage) {
-                response.nextLink = `http://localhost:8080/api/products?limit=${limit}&page=${productsData.nextPage}&disponible=${disponible}&sort=${sortOpt}${catQuery}`;
+                response.nextLink = `https://ecommerce-coder-guet.onrender.com/api/products?limit=${limit}&page=${productsData.nextPage}&disponible=${disponible}&sort=${sortOpt}${catQuery}`;
             }
     
             res.json(response);
